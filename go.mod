@@ -1,4 +1,4 @@
-module github.com/trichner/oauthflow
+module github.com/trichner/oauthflows
 
 go 1.18
 
