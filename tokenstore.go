@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"golang.org/x/oauth2"
 	"os"
-	"time"
 )
 
 type TokenStore interface {
@@ -27,9 +26,6 @@ func (f *fileTokenStore) Get(key string) (*oauth2.Token, error) {
 		return nil, nil
 	}
 
-	if t.Expiry.Before(time.Now()) {
-		return nil, fmt.Errorf("token expired at %s", t.Expiry)
-	}
 	return t, nil
 }
 

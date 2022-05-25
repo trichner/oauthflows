@@ -40,8 +40,8 @@ func TestNewClient(t *testing.T) {
 	assert.NoError(t, err)
 
 	res, err := client.Get("https://www.googleapis.com/oauth2/v1/userinfo?alt=json")
-	defer res.Body.Close()
 	assert.NoError(t, err)
+	defer res.Body.Close()
 
 	data, err := io.ReadAll(res.Body)
 	assert.NoError(t, err)

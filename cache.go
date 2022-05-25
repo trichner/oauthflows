@@ -29,7 +29,7 @@ func (f *cachedTokenStore) Token() (*oauth2.Token, error) {
 		return nil, err
 	}
 
-	if token != nil {
+	if isValid(token) {
 		return token, nil
 	}
 
@@ -42,4 +42,12 @@ func (f *cachedTokenStore) Token() (*oauth2.Token, error) {
 	}
 
 	return token, nil
+}
+
+func isValid(token *oauth2.Token) bool {
+	if token == nil {
+		return false
+	}
+
+	return token.Valid()
 }
