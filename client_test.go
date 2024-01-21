@@ -1,6 +1,7 @@
 package oauthflows
 
 import (
+	"errors"
 	"fmt"
 	"github.com/stretchr/testify/assert"
 	"io"
@@ -8,8 +9,8 @@ import (
 	"testing"
 )
 
-//FIXME
-const clientSecretsPath = "/the/path/to/client_secret.json"
+// FIXME
+const clientSecretsPath = "./client_secret.json"
 
 func ExampleNewClient() {
 	scopes := []string{"openid", "profile"}
@@ -52,7 +53,7 @@ func TestNewClient(t *testing.T) {
 func TestNewClient_ClientSecretsFile(t *testing.T) {
 	t.Skip("e2e test")
 
-	scopes := []string{"https://www.googleapis.com/auth/userinfo.profile", "openid", "email", "profile"}
+	scopes := []string{"https://www.googleapis.com/auth/userinfo.profile", "openid", "email"}
 	client, err := NewClient(WithClientSecretsFile(clientSecretsPath, scopes))
 	assert.NoError(t, err)
 
@@ -64,4 +65,12 @@ func TestNewClient_ClientSecretsFile(t *testing.T) {
 	assert.NoError(t, err)
 
 	fmt.Println(string(data))
+}
+
+func TestNewClient_ClientSecretsFile_FailOnScopes(t *testing.T) {
+	t.Skip("e2e test")
+
+	scopes := []string{"https://www.googleapis.com/auth/userinfo.profile", "openid", "email"}
+	_, err := NewClient(WithClientSecretsFile(clientSecretsPath, scopes), FailOnMissingScopes(true))
+	assert.True(t, errors.Is(err, ErrMissingScopes))
 }
